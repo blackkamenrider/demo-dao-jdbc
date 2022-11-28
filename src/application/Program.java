@@ -52,8 +52,20 @@ public class Program {
 		 
 		 System.out.println("Inserted ! New id = " + newSeler.getId());
 		 
-		}
 		
+		
+	
+		System.out.println("\n====TEST 5: seller upadate ====");
+		
+		 seller = sellerDao.findById(1);
+		seller.setName("Martha Waine");//setando um novo nome
+		
+		sellerDao.update(seller);//atualizando os dados passando este objeto seller como argumento
+		 
+		 System.out.println("Update completed!! " );
+		 
+	}
+	
 		
 		
 	}
