@@ -3,6 +3,7 @@ package model.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import db.DB;
@@ -65,20 +66,11 @@ public class SellerDaoJDBC implements SellerDao {
 			if(rs.next()) {// testando se ainda é nulo ou nao. se nao for nulo é porq veio algum resultado do banco de dados
 				//se entrou é porq reornou um resultado do alex e eu preciso navegar entre essa informaçao e instanciar os objetos, o vendedor e o departamento pendurado nele
 				
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));//este department dentro parametro é a coluna que veio do banco 
-				dep.setName(rs.getString("DepName"));//a coluna que veio do banco onde esta o nome
-			//instancie um departamento e setei os valores dele. agora vou criar um objeto seller apontando para o departamento
+				Department dep = instanciateDepartment(rs);
 				
-				Seller obj = new Seller();
+			//instanciei um departamento e setei os valores dele.(coloquei este codigo dentro de uma funçao e chamei essa funçao na linha de cima) agora vou criar um objeto seller apontando para o departamento
 				
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);//neste caso nao é o id do departamento e sim uma associaçao de objetos. quero um obj montado e o dep é o obj montado
-				
+				Seller obj = instantiateSeller(rs, dep); // aqui estava todo o codigo de instanciaçao porém, coloquei ele dentro de uma funçao 
 				return obj; //retornando o objeto seller que criei a cima
 			}
 			
@@ -96,6 +88,31 @@ public class SellerDaoJDBC implements SellerDao {
 			//DB.closeConnection(); conecçao eu nao fecho aqui, deixo pra fechar no programa principa porq ainda posso precisar dele aberto
 		}
 	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		
+		Seller obj = new Seller();
+		
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);//neste caso nao é o id do departamento e sim uma associaçao de objetos. quero um obj montado e o dep é o obj montado
+		
+		return obj;
+	}
+
+
+	private Department instanciateDepartment(ResultSet rs) throws SQLException {
+	//possivell q de uma escessao porém onde uso este metodo eu já tratei a possíveis excessoes entao, propaguei com trows sqlexception para que quem a chamar a trate	
+		    Department dep = new Department();
+			dep.setId(rs.getInt("DepartmentId"));//este department dentro parametro é a coluna que veio do banco 
+			dep.setName(rs.getString("DepName"));//a coluna que veio do banco onde esta o nome
+			
+			return dep;
+	}
+
 
 	@Override
 	public List<Seller> findAll() {

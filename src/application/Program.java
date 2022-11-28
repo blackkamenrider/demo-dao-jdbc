@@ -16,11 +16,13 @@ public class Program {
 		//Seller seller = new Seller(21, "Marcela", "marcela@gmail.com", new Date(), 3000.0, obj);
 		
 		SellerDao sellerDao = DaoFactory.createSellerDao();
+		
+		System.out.println("====TEST 1: seller findById ====");
 			
 		Seller seller = sellerDao.findById(3); //buscando no banco de dados o vendedor de id 3
 		
 		if(seller == null) {
-			System.out.println("Vendedor nao cadastrado! faça se o favor de prestar mais atençao seu fi de deus...");
+			System.out.println("Vendedor nao cadastrado! faça se o favor de prestar mais atençao seu fi de deus...humoooor vamos rii");
 		}
 		
 		//System.out.println(obj);
